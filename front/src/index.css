@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#root {
+  background: #141e30;
+  background: -webkit-linear-gradient(to left, #141e30, #243b55);
+  background: linear-gradient(to left, #141e30, #243b55);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
