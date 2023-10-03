@@ -23,8 +23,8 @@ function App() {
   }, [])
 
   const getSeries = async () => {
+    setLoading(true)
     try {
-      setLoading(true)
       let response = await axios.get(`${API_URL}/series`)
       setSeries(response.data)
     } catch (e) {
