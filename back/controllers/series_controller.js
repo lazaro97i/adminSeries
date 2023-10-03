@@ -70,8 +70,9 @@ const controller = {
   update: async (req, res) => {
 
     const { codigo, titulo, descripcion, atp, estrellas, fechaEstreno, genero, precioAlquiler } = req.body
-    const fecha = new Date(fechaEstreno.split('-')[0], fechaEstreno.split('-')[1] - 1, fechaEstreno.split('-')[2] + 1)
-
+    const fecha = new Date(fechaEstreno.split('-')[0], fechaEstreno.split('-')[1] - 1, fechaEstreno.split('-')[2])
+    fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset())
+    console.log(fecha)
     try {
       const serie = await pool.query("UPDATE series SET titulo=?, descripcion=?, atp=?, estrellas=?, fechaEstreno=?, genero=?, precioAlquiler=? WHERE codigo=?", [titulo, descripcion, atp, estrellas, fecha, genero, precioAlquiler, codigo])
       if (serie) {
