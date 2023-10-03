@@ -144,11 +144,14 @@ function App() {
             series?.series[0].length > 0
               ? series?.series[0]?.filter(s => (s.titulo).toLowerCase().includes(filter.toLowerCase())).length > 0
                 ? series?.series[0]?.filter(s => (s.titulo).toLowerCase().includes(filter.toLowerCase())).map((s, i) => {
+                  let fecha = (new Date(s?.fechaEstreno).toLocaleDateString().split('/'))
+                  fecha[1] = parseInt(fecha[1]) + 1
+                  let newFecha = new Date(fecha[2], fecha[0] - 1, fecha[1]).toLocaleDateString('en-GB')
                   return (
                     <tr key={i} onClick={(e) => { setIdSerie(parseInt(e.target.attributes[0].value)) }} value={s.codigo} className='hover:bg-[#141e30] transition-all duration-200 cursor-pointer'>
                       <td value={s.codigo} className='border text-sm pl-2'>{s.titulo}</td>
                       <td value={s.codigo} className='border hidden md:table-cell text-sm pl-2 whitespace-nowrap overflow-hidden'>{s.descripcion}</td>
-                      <td value={s.codigo} className='border hidden md:table-cell text-sm pl-2'>{new Date(s.fechaEstreno).toLocaleDateString('en-GB')}</td>
+                      <td value={s.codigo} className='border hidden md:table-cell text-sm pl-2'>{newFecha}</td>
                       <td value={s.codigo} className='border text-sm text-center'>{s.estrellas}</td>
                       <td value={s.codigo} className='border text-sm pl-2'>{s.genero}</td>
                       <td value={s.codigo} className='border hidden md:table-cell text-sm pl-2'>${s.precioAlquiler}</td>

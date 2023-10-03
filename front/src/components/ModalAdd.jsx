@@ -45,6 +45,7 @@ const ModalAdd = ({ post, modal, idSerie, update, setId }) => {
     const atp = document.getElementById('atp')
 
     let fecha = new Date(serie?.fechaEstreno).toLocaleDateString().split('/').reverse()
+    fecha[1] = parseInt(fecha[1]) + 1
     fecha[1] = parseInt(fecha[1]) < 10 ? (`0${fecha[1]}`) : fecha[1]
     fecha[2] = parseInt(fecha[2]) < 10 ? (`0${fecha[2]}`) : fecha[2]
     let aux = fecha[2]
