@@ -15,6 +15,8 @@ function App() {
   const [update, setUpdate] = useState(false)
   const [modalConfirm, setModalConfirm] = useState(false)
   const [filter, setFilter] = useState('')
+  const [loading, setLoading] = useState(false)
+
 
   useEffect(() => {
     getSeries()
@@ -22,10 +24,13 @@ function App() {
 
   const getSeries = async () => {
     try {
+      setLoading(true)
       let response = await axios.get(`${API_URL}/series`)
       setSeries(response.data)
     } catch (e) {
       console.log(e)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -80,6 +85,7 @@ function App() {
 
   return (
     <div className='px-6 w-full h-screen flex flex-col justify-start items-center max-w-[1150px]'>
+
       {
         modalConfirm
           ? <ModalConfirm
@@ -139,35 +145,39 @@ function App() {
             <th className='border text-sm text-center w-[7%]'>Estado</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className='relative'>
           {
-            series?.series[0].length > 0
-              ? series?.series[0]?.filter(s => (s.titulo).toLowerCase().includes(filter.toLowerCase())).length > 0
-                ? series?.series[0]?.filter(s => (s.titulo).toLowerCase().includes(filter.toLowerCase())).map((s, i) => {
-                  let fecha = (new Date(s?.fechaEstreno).toLocaleDateString().split('/'))
-                  fecha[1] = parseInt(fecha[1]) + 1
-                  let newFecha = new Date(fecha[2], fecha[0] - 1, fecha[1]).toLocaleDateString('en-GB')
-                  return (
-                    <tr key={i} onClick={(e) => { setIdSerie(parseInt(e.target.attributes[0].value)) }} value={s.codigo} className='hover:bg-[#141e30] transition-all duration-200 cursor-pointer'>
-                      <td value={s.codigo} className='border text-sm pl-2'>{s.titulo}</td>
-                      <td value={s.codigo} className='border hidden md:table-cell text-sm pl-2 whitespace-nowrap overflow-hidden'>{s.descripcion}</td>
-                      <td value={s.codigo} className='border hidden md:table-cell text-sm pl-2'>{newFecha}</td>
-                      <td value={s.codigo} className='border text-sm text-center'>{s.estrellas}</td>
-                      <td value={s.codigo} className='border text-sm pl-2'>{s.genero}</td>
-                      <td value={s.codigo} className='border hidden md:table-cell text-sm pl-2'>${s.precioAlquiler}</td>
-                      <td value={s.codigo} className='border flex justify-center'>
-                        {
-                          s.atp === 1
-                            ? <svg width={'30px'} viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg" fill="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <g fill="none" fillRule="evenodd" stroke="#ffffff" strokeLinecap="round" strokeLinejoin="round" transform="translate(3 3)"> <path d="m2.5.5h10c1.1045695 0 2 .8954305 2 2v10c0 1.1045695-.8954305 2-2 2h-10c-1.1045695 0-2-.8954305-2-2v-10c0-1.1045695.8954305-2 2-2z"></path> <path d="m4.5 7.5 2 2 4-4"></path> </g> </g></svg>
-                            : <svg width={'30px'} viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"><g id="🔍-Product-Icons" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd"> <g id="ic_fluent_checkbox_unchecked_24_regular" fill="#ffffff" fillRule="nonzero"> <path d="M5.75,3 L18.25,3 C19.7687831,3 21,4.23121694 21,5.75 L21,18.25 C21,19.7687831 19.7687831,21 18.25,21 L5.75,21 C4.23121694,21 3,19.7687831 3,18.25 L3,5.75 C3,4.23121694 4.23121694,3 5.75,3 Z M5.75,4.5 C5.05964406,4.5 4.5,5.05964406 4.5,5.75 L4.5,18.25 C4.5,18.9403559 5.05964406,19.5 5.75,19.5 L18.25,19.5 C18.9403559,19.5 19.5,18.9403559 19.5,18.25 L19.5,5.75 C19.5,5.05964406 18.9403559,4.5 18.25,4.5 L5.75,4.5 Z" id="🎨Color"> </path> </g> </g> </g></svg>
-                        }
-                      </td>
-                      <td value={s.codigo} className='border text-center text-sm pl-2'>{s.estado}</td>
-                    </tr>
-                  )
-                })
-                : <tr><td className='py-2 text-center w-full flex justify-center'>No se encontraron resultados</td></tr>
-              : <tr><td className='py-10 text-center w-full flex justify-center'>No se encontraron series</td></tr>
+            loading
+              ? <span className='h-[150px] flex content-center'>
+                <svg className='absolute top-5 w-full' xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" overflow="visible" fill="#52d4ff" stroke="none"><defs><circle id="loader" r="4" cx="50" cy="50" transform="translate(0 -30)" /></defs><use xlinkHref="#loader" transform="rotate(0 50 50)"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0s" repeatCount="indefinite"></animate></use><use xlinkHref="#loader" transform="rotate(45 50 50)"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.125s" repeatCount="indefinite"></animate></use><use xlinkHref="#loader" transform="rotate(90 50 50)"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.25s" repeatCount="indefinite"></animate></use><use xlinkHref="#loader" transform="rotate(135 50 50)"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.375s" repeatCount="indefinite"></animate></use><use xlinkHref="#loader" transform="rotate(180 50 50)"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.5s" repeatCount="indefinite"></animate></use><use xlinkHref="#loader" transform="rotate(225 50 50)"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.625s" repeatCount="indefinite"></animate></use><use xlinkHref="#loader" transform="rotate(270 50 50)"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.75s" repeatCount="indefinite"></animate></use><use xlinkHref="#loader" transform="rotate(315 50 50)"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.875s" repeatCount="indefinite"></animate></use></svg>
+              </span>
+              : series?.series[0].length > 0
+                ? series?.series[0]?.filter(s => (s.titulo).toLowerCase().includes(filter.toLowerCase())).length > 0
+                  ? series?.series[0]?.filter(s => (s.titulo).toLowerCase().includes(filter.toLowerCase())).map((s, i) => {
+                    let fecha = (new Date(s?.fechaEstreno).toLocaleDateString().split('/'))
+                    fecha[1] = parseInt(fecha[1]) + 1
+                    let newFecha = new Date(fecha[2], fecha[0] - 1, fecha[1]).toLocaleDateString('en-GB')
+                    return (
+                      <tr key={i} onClick={(e) => { setIdSerie(parseInt(e.target.attributes[0].value)) }} value={s.codigo} className='hover:bg-[#141e30] transition-all duration-200 cursor-pointer'>
+                        <td value={s.codigo} className='border text-sm pl-2'>{s.titulo}</td>
+                        <td value={s.codigo} className='border hidden md:table-cell text-sm pl-2 whitespace-nowrap overflow-hidden'>{s.descripcion}</td>
+                        <td value={s.codigo} className='border hidden md:table-cell text-sm pl-2'>{newFecha}</td>
+                        <td value={s.codigo} className='border text-sm text-center'>{s.estrellas}</td>
+                        <td value={s.codigo} className='border text-sm pl-2'>{s.genero}</td>
+                        <td value={s.codigo} className='border hidden md:table-cell text-sm pl-2'>${s.precioAlquiler}</td>
+                        <td value={s.codigo} className='border flex justify-center'>
+                          {
+                            s.atp === 1
+                              ? <svg width={'30px'} viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg" fill="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <g fill="none" fillRule="evenodd" stroke="#ffffff" strokeLinecap="round" strokeLinejoin="round" transform="translate(3 3)"> <path d="m2.5.5h10c1.1045695 0 2 .8954305 2 2v10c0 1.1045695-.8954305 2-2 2h-10c-1.1045695 0-2-.8954305-2-2v-10c0-1.1045695.8954305-2 2-2z"></path> <path d="m4.5 7.5 2 2 4-4"></path> </g> </g></svg>
+                              : <svg width={'30px'} viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"><g id="🔍-Product-Icons" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd"> <g id="ic_fluent_checkbox_unchecked_24_regular" fill="#ffffff" fillRule="nonzero"> <path d="M5.75,3 L18.25,3 C19.7687831,3 21,4.23121694 21,5.75 L21,18.25 C21,19.7687831 19.7687831,21 18.25,21 L5.75,21 C4.23121694,21 3,19.7687831 3,18.25 L3,5.75 C3,4.23121694 4.23121694,3 5.75,3 Z M5.75,4.5 C5.05964406,4.5 4.5,5.05964406 4.5,5.75 L4.5,18.25 C4.5,18.9403559 5.05964406,19.5 5.75,19.5 L18.25,19.5 C18.9403559,19.5 19.5,18.9403559 19.5,18.25 L19.5,5.75 C19.5,5.05964406 18.9403559,4.5 18.25,4.5 L5.75,4.5 Z" id="🎨Color"> </path> </g> </g> </g></svg>
+                          }
+                        </td>
+                        <td value={s.codigo} className='border text-center text-sm pl-2'>{s.estado}</td>
+                      </tr>
+                    )
+                  })
+                  : <tr><td className='py-2 text-center w-full flex justify-center'>No se encontraron resultados</td></tr>
+                : <tr><td className='py-10 text-center w-full flex justify-center'>No se encontraron series</td></tr>
           }
         </tbody>
       </table>
