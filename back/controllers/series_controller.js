@@ -70,11 +70,10 @@ const controller = {
   update: async (req, res) => {
 
     const { codigo, titulo, descripcion, atp, estrellas, fechaEstreno, genero, precioAlquiler } = req.body
-    // console.log(fechaEstreno.split('-').join('/'))
-    const fecha = new Date(fechaEstreno.split('-').join('/'))
-    console.log(fecha)
+
+
     try {
-      const serie = await pool.query("UPDATE series SET titulo=?, descripcion=?, atp=?, estrellas=?, fechaEstreno=?, genero=?, precioAlquiler=? WHERE codigo=?", [titulo, descripcion, atp, estrellas, fecha, genero, precioAlquiler, codigo])
+      const serie = await pool.query("UPDATE series SET titulo=?, descripcion=?, atp=?, estrellas=?, fechaEstreno=?, genero=?, precioAlquiler=? WHERE codigo=?", [titulo, descripcion, atp, estrellas, fechaEstreno, genero, precioAlquiler, codigo])
       if (serie) {
         res.status(200).json({
           success: true,
