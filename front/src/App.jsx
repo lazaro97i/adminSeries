@@ -19,11 +19,11 @@ function App() {
 
 
   useEffect(() => {
+    setLoading(true)
     getSeries()
   }, [])
 
   const getSeries = async () => {
-    setLoading(true)
     try {
       let response = await axios.get(`${API_URL}/series`)
       setSeries(response.data)
