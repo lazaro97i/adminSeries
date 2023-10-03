@@ -1,1 +1,1 @@
-# adminSeries
+Sistema de administracion ABM de series 
