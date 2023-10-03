@@ -34,7 +34,8 @@ const schema = Joi.object({
     'number.positive': 'Precio incorrecto'
   }),
   atp: Joi.boolean().required(),
-  estado: Joi.string()
+  estado: Joi.string(),
+  codigo: Joi.number()
 })
 
 export default schema
